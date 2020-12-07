@@ -719,7 +719,7 @@ void ConfigurationDialog::saveConfiguration()
     /* OPEN DIALOG FOR STREAMING TO FILE */
     QString pathToSaveConfiguration = QFileDialog::getSaveFileName(this,
         tr("Save Configuration File"), "",
-        tr("configuration file (*.cfg);;All Files (*)"));
+        tr("input file (*.inp);;configuration file (*.cfg);;All Files (*)"));
     if (pathToSaveConfiguration.isEmpty())
         return;
 

@@ -129,7 +129,7 @@ void ToolBox::loadConfigFromFile()
 {
     QString pathToConfiguration = QFileDialog::getOpenFileName(this,
         tr("Open Configuration File"), "",
-        tr("configuration file (*.cfg);;All Files (*)"));
+        tr("input file (*.inp);;configuration file (*.cfg);;All Files (*)"));
 
     if (pathToConfiguration.isEmpty())
         return;
