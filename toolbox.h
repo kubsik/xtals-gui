@@ -19,20 +19,21 @@ class ToolBox : public QFrame
 
 public:
     explicit ToolBox(QWidget *parent = 0);
+    QString pathToXTAL = "xtals";
     ~ToolBox();
 
 public slots:
     void setPathToConfiguration(QString pathToConfiguration);
     void loadConfigFromFile();
     void createConfigFile();
+    void verifyXTALSversion();
     void runXTALS();
 
 private:
     QToolBox *toolBox;
     QProcess *XTALS;
-    QString *pathToXTAL;
-    QStringList *argToRunXTAL;
-    QStringList *newArgToRunXTAL;
+    QStringList argToRunXTALversion;
+    QStringList newArgToRunXTAL;
     QWidget *configurationWidget;
     QWidget *optionsWidget;
     QWidget *processWidget;

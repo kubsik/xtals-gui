@@ -5,37 +5,9 @@
 ToolBox::ToolBox(QWidget *parent) : QFrame(parent) {
 //    setFixedSize(200,350); //default look better
 
+    verifyXTALSversion();
+
     confDialog = new ConfigurationDialog(this);
-
-    /* XTALS PROCESS
-    * We are running process from "/usr/local/bin/xtals" via terminal.
-    * It fails GUI (delete ToolBox instance) if binary of XTALS wasn't found.
-    * If version of GUI is not compatibile with binary version of XTAL (1.0)
-    * then it also kill that object.
-    */
-
-    QString pathToXTAL = "xtals";
-    QStringList argToRunXTAL;
-    argToRunXTAL << "--version";
-
-    QProcess *XTALS = new QProcess(this);
-
-    XTALS->setProcessChannelMode(QProcess::MergedChannels);
-    XTALS->start(pathToXTAL, argToRunXTAL);
-
-    if (!XTALS->waitForFinished()) {
-        QMessageBox::information(this, tr("ERROR 1"),
-            tr("Couldn't find XTALS in PATH"));
-        exit (1);
-    }
-
-    QString presentXtalVersion = XTALS->readAll();
-    QString expectedXtalVersion = "\nxtals  version: 1.0\n\n";
-    if (presentXtalVersion != expectedXtalVersion) {
-        QMessageBox::information(this, tr("ERROR 2"),
-            tr("XTAL-GUI doesn't support this version of XTAL binary!"));
-        exit (2);
-    }
 
     /* PAGE: Set configuration */
     QWidget *configurationWidget = new QWidget;
@@ -120,6 +92,37 @@ ToolBox::~ToolBox() {
     delete toolBox;
 }
 
+void ToolBox::verifyXTALSversion()
+{
+    /* XTALS PROCESS
+    * We are running process from "/usr/local/bin/xtals" via terminal
+    * from pathToXTAL = "xtals";
+    * Exit code#1 is thrown when binary of XTALS wasn't found.
+    * Exit code#2 is thrown when version of GUI is not compatibile with binary version of XTAL
+    * Version of XTALS that is supported: 1.0
+    */
+
+    QStringList argToRunXTAL;
+    argToRunXTAL << "--version";
+    QProcess XTALS(this);
+    XTALS.setProcessChannelMode(QProcess::MergedChannels);
+    XTALS.start(pathToXTAL, argToRunXTAL);
+
+    if (!XTALS.waitForFinished()) {
+        QMessageBox::information(this, tr("ERROR 1"),
+            tr("Couldn't find XTALS in PATH"));
+        exit (1);
+    }
+
+    QString presentXtalVersion = XTALS.readAll();
+    QString expectedXtalVersion = "\nxtals  version: 1.0\n\n";
+    if (presentXtalVersion != expectedXtalVersion) {
+        QMessageBox::information(this, tr("ERROR 2"),
+            tr("XTAL-GUI doesn't support this version of XTAL binary!"));
+        exit (2);
+    }
+}
+
 void ToolBox::setPathToConfiguration(QString pathToConfiguration)
 {
     configPathLine->setText(pathToConfiguration);
@@ -167,12 +170,13 @@ void ToolBox::runXTALS()
     if (isGeometry) newArgToRunXTAL << "--geometry";
     if (isDump) newArgToRunXTAL << "--dump";
 
-    QString pathToXTAL = "xtals"; //ISSUE 2 why is not global
+    /* QProcess is global because we don't want to kill it unintentionally*/
     QProcess *XTALS = new QProcess(this);
     XTALS->setProcessChannelMode(QProcess::MergedChannels);
     XTALS->start(pathToXTAL, newArgToRunXTAL);
 
-    // wymusza pozostanie na stronie któ©a nie jest potrezbna
-    while (XTALS->waitForReadyRead())
-        qDebug() << XTALS->readAll();
+    // Calling this function from the main (GUI) thread might cause your user interface to freeze.
+    while (XTALS->waitForReadyRead()) {
+        qDebug() << XTALS->readLine();
+    }
 }
