@@ -717,7 +717,7 @@ void ConfigurationDialog::saveConfiguration()
     }
 
     /* OPEN DIALOG FOR STREAMING TO FILE */
-    QString pathToSaveConfiguration = QFileDialog::getSaveFileName(this,
+    pathToSaveConfiguration = QFileDialog::getSaveFileName(this,
         tr("Save Configuration File"), "",
         tr("input file (*.inp);;configuration file (*.cfg);;All Files (*)"));
     if (pathToSaveConfiguration.isEmpty())
@@ -835,7 +835,5 @@ void ConfigurationDialog::saveConfiguration()
 
     QMessageBox::information(this, tr("Save Configuration File"),
         tr("File saved under: \"%1\"").arg(pathToSaveConfiguration));
-//    ISSUE 1:
-//    ToolBox::setPathToConfiguration(pathToSaveConfiguration);
-    hide();
+    done(1); //value for QDialog::Accepted
 }

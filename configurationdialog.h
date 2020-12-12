@@ -17,6 +17,7 @@ class ConfigurationDialog : public QDialog
     Q_OBJECT
 public:
     ConfigurationDialog(QWidget *parent = nullptr);
+    QString pathToSaveConfiguration;
 
 public slots:
     void saveConfiguration();

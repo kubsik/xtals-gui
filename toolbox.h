@@ -20,6 +20,7 @@ class ToolBox : public QFrame
 public:
     explicit ToolBox(QWidget *parent = 0);
     QString pathToXTAL = "xtals";
+    QString pathToConfiguration;
     ~ToolBox();
 
 public slots:
@@ -54,6 +55,5 @@ private:
     QProgressBar *progressBar;
     QSlider *slider;
     ConfigurationDialog *confDialog;
-    QString pathToConfiguration = "";
 };
 #endif // TOOLBOX_H

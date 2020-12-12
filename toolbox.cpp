@@ -7,8 +7,6 @@ ToolBox::ToolBox(QWidget *parent) : QFrame(parent) {
 
     verifyXTALSversion();
 
-    confDialog = new ConfigurationDialog(this);
-
     /* PAGE: Set configuration */
     QWidget *configurationWidget = new QWidget;
     createConfig = new QPushButton(tr("&Create file"));
@@ -130,19 +128,26 @@ void ToolBox::setPathToConfiguration(QString pathToConfiguration)
 
 void ToolBox::loadConfigFromFile()
 {
-    QString pathToConfiguration = QFileDialog::getOpenFileName(this,
+    pathToConfiguration = QFileDialog::getOpenFileName(this,
         tr("Open Configuration File"), "",
         tr("input file (*.inp);;configuration file (*.cfg);;All Files (*)"));
 
+    qDebug() << pathToConfiguration;
+
     if (pathToConfiguration.isEmpty())
         return;
-//    configPathLine->setText(pathToConfiguration);
     ToolBox::setPathToConfiguration(pathToConfiguration);
 }
 
 void ToolBox::createConfigFile()
 {
-    confDialog->show();
+    confDialog = new ConfigurationDialog(this);
+    confDialog->setModal(true);
+    confDialog->exec();
+
+    qDebug() << confDialog->pathToSaveConfiguration;
+
+    ToolBox::setPathToConfiguration(confDialog->pathToSaveConfiguration);
 }
 
 void ToolBox::runXTALS()
