@@ -774,7 +774,7 @@ void ConfigurationDialog::saveConfiguration()
     out << "\tverbose_pixel_size_n_x = " << verbose_pixel_size_n_x_text << ";" << '\n';
     out << "\tverbose_pixel_size_n_y = " << verbose_pixel_size_n_y_text << ";" << '\n';
     out << "\tverbose_selected_pixel = " << verbose_selected_pixel_text << ";" << '\n';
-    out << "\tsave_bitmasks_as = " << save_bitmasks_as_text << ";" << '\n';
+    out << "\tsave_bitmasks_as = \"" << save_bitmasks_as_text << "\";" << '\n';
     out << "};" << '\n' << '\n';
 
     out << "geometry =" << '\n'<< "{" << '\n';
@@ -792,7 +792,7 @@ void ConfigurationDialog::saveConfiguration()
     out << "\tbeam_center_y_initial = " << beam_center_y_initial_text << ";" << '\n';
     out << "\titer_max = " << iter_max_text << ";" << '\n';
     out << "\tdamping_factor = "   << damping_factor_text << ";" << '\n';
-    out << "\tintensity_cutoff_text = "    << intensity_cutoff_text << ";" << '\n';
+    out << "\tintensity_cutoff = "    << intensity_cutoff_text << ";" << '\n';
     out << "\tmatching_angle = "   << matching_angle_text << ";" << '\n';
     out << "\tconvergence_criteria = " << convergence_criteria_text << ";" << '\n';
     out << "\trecalculate_pairs = "   << recalculate_pairs_text << ";" << '\n';
@@ -815,8 +815,8 @@ void ConfigurationDialog::saveConfiguration()
     out << "\tsim_pixel_size_y = " << sim_pixel_size_y_text << ";" << '\n';
     out << "\tsim_beam_center_x = " << sim_beam_center_x_text << ";" << '\n';
     out << "\tsim_beam_center_y = " << sim_beam_center_y_text << ";" << '\n';
-    out << "\tsim_running_angle = " << sim_running_angle_text << ";" << '\n';
-    out << "\tsim_angle_start = \"" << sim_angle_start_text << "\";" << '\n';
+    out << "\tsim_running_angle = \"" << sim_running_angle_text << "\";" << '\n';
+    out << "\tsim_angle_start = " << sim_angle_start_text << ";" << '\n';
     out << "\tsim_angle_stop = " << sim_angle_stop_text << ";" << '\n';
     out << "\tsim_angle_step = " << sim_angle_step_text << ";" << '\n';
     out << "\tsim_omega_angle = " << sim_omega_angle_text << ";" << '\n';
@@ -829,8 +829,8 @@ void ConfigurationDialog::saveConfiguration()
     out << "};" << '\n' << '\n';
 
     out << "machine =" << '\n'<< "{" << '\n';
-    out << "\tdetector_distance = " << max_host_memory_text << ";" << '\n';
-    out << "\tmax_device_memory = "    << max_device_memory_text << ";" << '\n';
+    out << "\tmax_host_memory = " << max_host_memory_text << ";" << '\n';
+    out << "\tmax_device_memory = " << max_device_memory_text << ";" << '\n';
     out << "};" << '\n';
 
     QMessageBox::information(this, tr("Save Configuration File"),
