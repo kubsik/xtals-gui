@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include "toolbox.h"
 #include "configurationdialog.h"
+#include "xtalthread.h"
 
 ToolBox::ToolBox(QWidget *parent) : QFrame(parent) {
 //    setFixedSize(200,350); //default look better
@@ -175,13 +176,8 @@ void ToolBox::runXTALS()
     if (isGeometry) newArgToRunXTAL << "--geometry";
     if (isDump) newArgToRunXTAL << "--dump";
 
-    /* QProcess is global because we don't want to kill it unintentionally*/
-    QProcess *XTALS = new QProcess(this);
-    XTALS->setProcessChannelMode(QProcess::MergedChannels);
-    XTALS->start(pathToXTAL, newArgToRunXTAL);
-
-    // Calling this function from the main (GUI) thread might cause your user interface to freeze.
-    while (XTALS->waitForReadyRead()) {
-        qDebug() << XTALS->readLine();
-    }
+    /* thread goes out of scope (i.e. is destroyed) if pointer is not used*/
+    xtalThread *xtalInstance = new xtalThread;
+    xtalInstance->setArg(newArgToRunXTAL);
+    xtalInstance->start();
 }

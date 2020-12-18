@@ -18,11 +18,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     toolbox.cpp \
-    configurationdialog.cpp
+    configurationdialog.cpp \
+    xtalthread.cpp
 
 HEADERS += \
     toolbox.h \
-    configurationdialog.h
+    configurationdialog.h \
+    xtalthread.h
 
 FORMS += \
     toolbox.ui

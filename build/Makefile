@@ -50,11 +50,13 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../main.cpp \
 		../toolbox.cpp \
-		../configurationdialog.cpp moc_toolbox.cpp \
+		../configurationdialog.cpp \
+		../xtalthread.cpp moc_toolbox.cpp \
 		moc_configurationdialog.cpp
 OBJECTS       = main.o \
 		toolbox.o \
 		configurationdialog.o \
+		xtalthread.o \
 		moc_toolbox.o \
 		moc_configurationdialog.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -142,9 +144,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../../XTAL-GUI.pro ../toolbox.h \
-		../configurationdialog.h ../main.cpp \
+		../configurationdialog.h \
+		../xtalthread.h ../main.cpp \
 		../toolbox.cpp \
-		../configurationdialog.cpp
+		../configurationdialog.cpp \
+		../xtalthread.cpp
 QMAKE_TARGET  = XTAL-GUI
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = XTAL-GUI
@@ -366,8 +370,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../toolbox.h ../configurationdialog.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../main.cpp ../toolbox.cpp ../configurationdialog.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../toolbox.h ../configurationdialog.h ../xtalthread.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../main.cpp ../toolbox.cpp ../configurationdialog.cpp ../xtalthread.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../toolbox.ui $(DISTDIR)/
 	$(COPY_FILE) --parents XTAL-GUI_en_GB.ts $(DISTDIR)/
 
@@ -425,12 +429,16 @@ main.o: ../main.cpp ../toolbox.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 toolbox.o: ../toolbox.cpp ../toolbox.h \
-		../configurationdialog.h
+		../configurationdialog.h \
+		../xtalthread.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o toolbox.o ../toolbox.cpp
 
 configurationdialog.o: ../configurationdialog.cpp ../toolbox.h \
 		../configurationdialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o configurationdialog.o ../configurationdialog.cpp
+
+xtalthread.o: ../xtalthread.cpp ../xtalthread.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xtalthread.o ../xtalthread.cpp
 
 moc_toolbox.o: moc_toolbox.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_toolbox.o moc_toolbox.cpp
