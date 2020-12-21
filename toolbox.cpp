@@ -181,6 +181,13 @@ void ToolBox::runXTALS()
         return;
     }
 
+    if (configPathLine->text() == "") {
+        QMessageBox::information(this, tr("No configuration file!"),
+            tr("You must choose the configuration file to run XTALS!"));
+        toolBox->setCurrentIndex(0);
+        return;
+    }
+
     QStringList newArgToRunXTAL;
     newArgToRunXTAL << "--readconf" << configPathLine->text();
     if (isExport) newArgToRunXTAL << "--export";
