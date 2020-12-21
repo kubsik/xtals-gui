@@ -4,7 +4,7 @@
 #include "xtalthread.h"
 
 ToolBox::ToolBox(QWidget *parent) : QFrame(parent) {
-//    setFixedSize(200,350); //default look better
+    setFixedSize(200,350); //default look better
 
     verifyXTALSversion();
 
@@ -23,6 +23,7 @@ ToolBox::ToolBox(QWidget *parent) : QFrame(parent) {
     configurationLayout->addWidget(loadConfig);
     configurationLayout->addWidget(configPathLabel);
     configurationLayout->addWidget(configPathLine);
+    configurationLayout->addStretch();
     configurationWidget->setLayout(configurationLayout);
 
     /* PAGE: Choose options */
@@ -52,6 +53,7 @@ ToolBox::ToolBox(QWidget *parent) : QFrame(parent) {
     optionsLayout->addWidget(geometryChBox);
     optionsLayout->addWidget(dumpChBox);
     optionsLayout->addWidget(runProcessing);
+    optionsLayout->addStretch();
     optionsWidget->setLayout(optionsLayout);
 
     /* PAGE: Process data */
@@ -63,6 +65,7 @@ ToolBox::ToolBox(QWidget *parent) : QFrame(parent) {
     stopProcessing = new QPushButton(tr("&Stop"));
     processLayout->addWidget(progressBar);
     processLayout->addWidget(stopProcessing);
+    processLayout->addStretch();
     processWidget->setLayout(processLayout);
 
     /* Organize Widgets in ToolBox */
