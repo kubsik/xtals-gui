@@ -11,7 +11,6 @@
 #include <QVBoxLayout>
 #include <QProgressBar>
 #include <QFileDialog>
-#include <QSlider>
 
 class ToolBox : public QFrame
 {
@@ -28,6 +27,7 @@ public slots:
     void loadConfigFromFile();
     void createConfigFile();
     void verifyXTALSversion();
+    void analyzeProgressBar(QThread *instance);
     void runXTALS();
 
 private:
@@ -53,7 +53,6 @@ private:
     QCheckBox *geometryChBox;
     QCheckBox *dumpChBox;
     QProgressBar *progressBar;
-    QSlider *slider;
     ConfigurationDialog *confDialog;
 };
 #endif // TOOLBOX_H

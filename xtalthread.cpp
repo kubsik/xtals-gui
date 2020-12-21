@@ -16,7 +16,7 @@ void xtalThread::run()
     XTALS.setProcessChannelMode(QProcess::MergedChannels);
     XTALS.start(pathToXTAL, argToRunXTAL);
     while (XTALS.waitForReadyRead()) {
-        qDebug() << XTALS.readAll();
+        qDebug() << XTALS.readLine();
     }
     XTALS.waitForFinished();
 }

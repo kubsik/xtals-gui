@@ -7,10 +7,11 @@ class xtalThread :public QThread
 {
 public:
     xtalThread();
-    QString pathToXTAL = "xtals";
-    QStringList argToRunXTAL;
     void run();
     void setArg(QStringList argToRunXTAL);
+private:
+    QString pathToXTAL = "xtals";
+    QStringList argToRunXTAL;
 };
 
 #endif // XTALTHREAD_H

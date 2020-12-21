@@ -59,16 +59,9 @@ ToolBox::ToolBox(QWidget *parent) : QFrame(parent) {
     QVBoxLayout *processLayout = new QVBoxLayout;
     progressBar = new QProgressBar;
     progressBar->setRange(0,100);
-    progressBar->setValue(14);
+    progressBar->setValue(0);
     stopProcessing = new QPushButton(tr("&Stop"));
-    slider = new QSlider;
-    slider->setOrientation(Qt::Horizontal);
-    slider->setRange(0, 100);
-    slider->setValue(14);
-    connect(slider, SIGNAL (valueChanged(int)), progressBar, SLOT (setValue(int)));
     processLayout->addWidget(progressBar);
-    processLayout->addWidget(slider);
-
     processLayout->addWidget(stopProcessing);
     processWidget->setLayout(processLayout);
 
@@ -133,7 +126,7 @@ void ToolBox::loadConfigFromFile()
         tr("Open Configuration File"), "",
         tr("input file (*.inp);;configuration file (*.cfg);;All Files (*)"));
 
-    qDebug() << pathToConfiguration;
+    qDebug() << "DEBUG: " << pathToConfiguration;
 
     if (pathToConfiguration.isEmpty())
         return;
@@ -146,14 +139,31 @@ void ToolBox::createConfigFile()
     confDialog->setModal(true);
     confDialog->exec();
 
-    qDebug() << confDialog->pathToSaveConfiguration;
+    qDebug() << "DEBUG: " << confDialog->pathToSaveConfiguration;
 
     ToolBox::setPathToConfiguration(confDialog->pathToSaveConfiguration);
+}
+
+void ToolBox::analyzeProgressBar(QThread *instance)
+{
+    int numFiles = 91;
+    progressBar->setRange(0,numFiles);
+    for (int i=0; i < numFiles; i++) {
+        for (int j=0; j < 10000000; j++) {}
+        progressBar->setValue(i);
+    }
+
+    while (instance->isRunning()){}
+    if (instance->isFinished())
+    {
+        progressBar->setValue(numFiles);
+    }
 }
 
 void ToolBox::runXTALS()
 {
     toolBox->setCurrentIndex(2);
+    progressBar->setValue(0);
 
     bool isExport = exportChBox->isChecked();
     bool isSignal = signalChBox->isChecked();
@@ -180,4 +190,6 @@ void ToolBox::runXTALS()
     xtalThread *xtalInstance = new xtalThread;
     xtalInstance->setArg(newArgToRunXTAL);
     xtalInstance->start();
+
+    analyzeProgressBar(xtalInstance);
 }
