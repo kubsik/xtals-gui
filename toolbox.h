@@ -2,6 +2,7 @@
 #define TOOLBOX_H
 
 #include "configurationdialog.h"
+#include "xtalthread.h"
 #include <QFrame>
 #include <QProcess>
 #include <QToolBox>
@@ -11,6 +12,7 @@
 #include <QVBoxLayout>
 #include <QProgressBar>
 #include <QFileDialog>
+#include <QTextEdit>
 
 class ToolBox : public QFrame
 {
@@ -21,6 +23,8 @@ public:
     QString pathToXTAL = "xtals";
     QString pathToConfiguration;
     ~ToolBox();
+//    xtalThread *xtalInstance;
+    int theIterator = 0;
 
 public slots:
     void setPathToConfiguration(QString pathToConfiguration);
@@ -29,6 +33,7 @@ public slots:
     void verifyXTALSversion();
     void analyzeProgressBar(QThread *instance);
     void runXTALS();
+    void onNewLine(QString);
 
 private:
     QToolBox *toolBox;
@@ -47,6 +52,7 @@ private:
     QLineEdit *configPathLine;
     QPushButton *runProcessing;
     QPushButton *stopProcessing;
+    QTextEdit *terminalText;
     QCheckBox *exportChBox;
     QCheckBox *signalChBox;
     QCheckBox *integrateChBox;

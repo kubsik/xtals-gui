@@ -4,7 +4,7 @@
 #include "xtalthread.h"
 
 ToolBox::ToolBox(QWidget *parent) : QFrame(parent) {
-    setFixedSize(200,350); //default look better
+    setFixedSize(400,350); //default look better
 
     verifyXTALSversion();
 
@@ -59,10 +59,13 @@ ToolBox::ToolBox(QWidget *parent) : QFrame(parent) {
     /* PAGE: Process data */
     QWidget *processWidget = new QWidget;
     QVBoxLayout *processLayout = new QVBoxLayout;
+    terminalText = new QTextEdit;
+    terminalText->setReadOnly(true);
     progressBar = new QProgressBar;
     progressBar->setRange(0,100);
     progressBar->setValue(0);
     stopProcessing = new QPushButton(tr("&Stop"));
+    processLayout->addWidget(terminalText);
     processLayout->addWidget(progressBar);
     processLayout->addWidget(stopProcessing);
     processLayout->addStretch();
@@ -151,12 +154,12 @@ void ToolBox::analyzeProgressBar(QThread *instance)
 {
     int numFiles = 91;
     progressBar->setRange(0,numFiles);
-    for (int i=0; i < numFiles; i++) {
-        for (int j=0; j < 10000000; j++) {}
-        progressBar->setValue(i);
-    }
+//    for (int i=0; i < numFiles; i++) {
+//        for (int j=0; j < 10000000; j++) {}
+//        progressBar->setValue(i);
+//    }
 
-    while (instance->isRunning()){}
+//    while (instance->isRunning()){}
     if (instance->isFinished())
     {
         progressBar->setValue(numFiles);
@@ -165,6 +168,7 @@ void ToolBox::analyzeProgressBar(QThread *instance)
 
 void ToolBox::runXTALS()
 {
+    theIterator = 0;
     toolBox->setCurrentIndex(2);
     progressBar->setValue(0);
 
@@ -198,8 +202,19 @@ void ToolBox::runXTALS()
 
     /* thread goes out of scope (i.e. is destroyed) if pointer is not used*/
     xtalThread *xtalInstance = new xtalThread;
+    connect(xtalInstance, SIGNAL(newLineSignal(QString)), this, SLOT(onNewLine(QString)));
     xtalInstance->setArg(newArgToRunXTAL);
     xtalInstance->start();
 
     analyzeProgressBar(xtalInstance);
+}
+
+void ToolBox::onNewLine(QString newLine)
+{
+    terminalText->append(newLine);
+    progressBar->setValue(theIterator);
+    theIterator++;
+//    if (instance->isFinished()) {
+//        progressBar->setValue(100);
+//    }
 }

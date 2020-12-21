@@ -52,13 +52,15 @@ SOURCES       = ../main.cpp \
 		../toolbox.cpp \
 		../configurationdialog.cpp \
 		../xtalthread.cpp moc_toolbox.cpp \
-		moc_configurationdialog.cpp
+		moc_configurationdialog.cpp \
+		moc_xtalthread.cpp
 OBJECTS       = main.o \
 		toolbox.o \
 		configurationdialog.o \
 		xtalthread.o \
 		moc_toolbox.o \
-		moc_configurationdialog.o
+		moc_configurationdialog.o \
+		moc_xtalthread.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -396,15 +398,19 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_toolbox.cpp moc_configurationdialog.cpp
+compiler_moc_header_make_all: moc_toolbox.cpp moc_configurationdialog.cpp moc_xtalthread.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_toolbox.cpp moc_configurationdialog.cpp
+	-$(DEL_FILE) moc_toolbox.cpp moc_configurationdialog.cpp moc_xtalthread.cpp
 moc_toolbox.cpp: ../configurationdialog.h \
+		../xtalthread.h \
 		../toolbox.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/kubsik/repos/xtals-gui -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../toolbox.h -o moc_toolbox.cpp
 
 moc_configurationdialog.cpp: ../configurationdialog.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/kubsik/repos/xtals-gui -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../configurationdialog.h -o moc_configurationdialog.cpp
+
+moc_xtalthread.cpp: ../xtalthread.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/kubsik/repos/xtals-gui -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../xtalthread.h -o moc_xtalthread.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -425,7 +431,8 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 main.o: ../main.cpp ../toolbox.h \
-		../configurationdialog.h
+		../configurationdialog.h \
+		../xtalthread.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 toolbox.o: ../toolbox.cpp ../toolbox.h \
@@ -434,10 +441,13 @@ toolbox.o: ../toolbox.cpp ../toolbox.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o toolbox.o ../toolbox.cpp
 
 configurationdialog.o: ../configurationdialog.cpp ../toolbox.h \
-		../configurationdialog.h
+		../configurationdialog.h \
+		../xtalthread.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o configurationdialog.o ../configurationdialog.cpp
 
-xtalthread.o: ../xtalthread.cpp ../xtalthread.h
+xtalthread.o: ../xtalthread.cpp ../xtalthread.h \
+		../toolbox.h \
+		../configurationdialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o xtalthread.o ../xtalthread.cpp
 
 moc_toolbox.o: moc_toolbox.cpp 
@@ -445,6 +455,9 @@ moc_toolbox.o: moc_toolbox.cpp
 
 moc_configurationdialog.o: moc_configurationdialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_configurationdialog.o moc_configurationdialog.cpp
+
+moc_xtalthread.o: moc_xtalthread.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_xtalthread.o moc_xtalthread.cpp
 
 ####### Install
 

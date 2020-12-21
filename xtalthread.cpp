@@ -9,6 +9,11 @@ xtalThread::xtalThread()
 
 }
 
+//xtalThread::~xtalThread()
+//{
+
+//}
+
 void xtalThread::run()
 {
     qDebug() << "DEBUG: start XTAL thread";
@@ -16,7 +21,9 @@ void xtalThread::run()
     XTALS.setProcessChannelMode(QProcess::MergedChannels);
     XTALS.start(pathToXTAL, argToRunXTAL);
     while (XTALS.waitForReadyRead()) {
-        qDebug() << XTALS.readLine();
+        singleLine = XTALS.readLine();
+        emit newLineSignal(singleLine);
+        qDebug() << "DEBUG: " << singleLine;
     }
     XTALS.waitForFinished();
 }
