@@ -66,6 +66,7 @@ ToolBox::ToolBox(QWidget *parent) : QFrame(parent) {
     progressBar->setValue(0);
     stopProcessing = new QPushButton(tr("&Stop"));
     processLayout->addWidget(terminalText);
+    connect(stopProcessing, &QPushButton::clicked, this, &ToolBox::stopXTALS);
     processLayout->addWidget(progressBar);
     processLayout->addWidget(stopProcessing);
     processLayout->addStretch();
@@ -188,6 +189,7 @@ void ToolBox::runXTALS()
     xtalThread *xtalInstance = new xtalThread;
     connect(xtalInstance, SIGNAL(newLineSignal(QString)), this, SLOT(onNewLine(QString)));
     connect(xtalInstance, SIGNAL(endSignal(int)), this, SLOT(onEnd(int)));
+    connect(this, SIGNAL(stopThreadSignal(bool)), xtalInstance, SLOT(stopThreadSlot(bool)));
     xtalInstance->setArg(newArgToRunXTAL);
     xtalInstance->start();
 }
@@ -199,7 +201,6 @@ void ToolBox::onNewLine(QString newLine)
     QMutex mutex;
     mutex.lock();
     if (theIterator < 99) {
-        qDebug() << theIterator;
         theIterator++;
     }
     mutex.unlock();
@@ -210,4 +211,10 @@ void ToolBox::onEnd(int iter)
     qDebug() << "DEBUG: onEnd SLOT";
     theIterator = iter;
     progressBar->setValue(theIterator);
+}
+
+void ToolBox::stopXTALS()
+{
+    emit stopThreadSignal(true);
+    qDebug() << "DEBUG: emit stopThreadSignal(true)";
 }

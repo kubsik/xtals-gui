@@ -26,8 +26,14 @@ void xtalThread::run()
         mutex.lock();
         emit newLineSignal(singleLine);
         mutex.unlock();
-        qDebug() << "DEBUG: " << singleLine;
+        qDebug() << singleLine;
         msleep(10);
+        if (killThreadFlag) {
+          XTALS.kill();
+          killThreadFlag = false;
+          newLineSignal("SIGKILL send to xtal thread");
+          return;
+        }
     }
     XTALS.waitForFinished();
     qDebug() << "DEBUG: emit endSignal";
@@ -40,4 +46,10 @@ void xtalThread::setArg(QStringList arg)
 {
     qDebug() << "DEBUG: set args for XTAL thread";
     argToRunXTAL = arg;
+}
+
+void xtalThread::stopThreadSlot(bool stopFlag)
+{
+    qDebug() << "DEBUG: stopThread SLOT";
+    killThreadFlag = stopFlag;
 }

@@ -15,9 +15,12 @@ private:
     QString pathToXTAL = "xtals";
     QStringList argToRunXTAL;
     QString singleLine;
+    bool killThreadFlag = false;
 signals:
     QString newLineSignal(QString singleLine);
     int endSignal(int);
+public slots:
+    void stopThreadSlot(bool stopFlag);
 };
 
 

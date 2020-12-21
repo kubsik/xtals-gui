@@ -34,7 +34,10 @@ public slots:
     void runXTALS();
     void onNewLine(QString);
     void onEnd(int);
-
+    void stopXTALS();
+signals:
+    bool stopThreadSignal(bool);
+    int endSignal(int);
 private:
     QToolBox *toolBox;
     QProcess *XTALS;
