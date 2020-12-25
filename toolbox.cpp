@@ -150,22 +150,6 @@ void ToolBox::createConfigFile()
     ToolBox::setPathToConfiguration(confDialog->pathToSaveConfiguration);
 }
 
-void ToolBox::analyzeProgressBar(QThread *instance)
-{
-    int numFiles = 91;
-    progressBar->setRange(0,numFiles);
-//    for (int i=0; i < numFiles; i++) {
-//        for (int j=0; j < 10000000; j++) {}
-//        progressBar->setValue(i);
-//    }
-
-//    while (instance->isRunning()){}
-    if (instance->isFinished())
-    {
-        progressBar->setValue(numFiles);
-    }
-}
-
 void ToolBox::runXTALS()
 {
     theIterator = 0;
@@ -203,18 +187,27 @@ void ToolBox::runXTALS()
     /* thread goes out of scope (i.e. is destroyed) if pointer is not used*/
     xtalThread *xtalInstance = new xtalThread;
     connect(xtalInstance, SIGNAL(newLineSignal(QString)), this, SLOT(onNewLine(QString)));
+    connect(xtalInstance, SIGNAL(endSignal(int)), this, SLOT(onEnd(int)));
     xtalInstance->setArg(newArgToRunXTAL);
     xtalInstance->start();
-
-    analyzeProgressBar(xtalInstance);
 }
 
 void ToolBox::onNewLine(QString newLine)
 {
     terminalText->append(newLine);
     progressBar->setValue(theIterator);
-    theIterator++;
-//    if (instance->isFinished()) {
-//        progressBar->setValue(100);
-//    }
+    QMutex mutex;
+    mutex.lock();
+    if (theIterator < 99) {
+        qDebug() << theIterator;
+        theIterator++;
+    }
+    mutex.unlock();
+}
+
+void ToolBox::onEnd(int iter)
+{
+    qDebug() << "DEBUG: onEnd SLOT";
+    theIterator = iter;
+    progressBar->setValue(theIterator);
 }

@@ -2,7 +2,9 @@
 build/ui_toolbox.h
 build/moc_toolbox.cpp
 build/moc_configurationdialog.cpp
+build/moc_xtalthread.cpp
 build/XTAL-GUI
+build/*.inp
 XTAL-GUI.pro.user
 
 # Prerequisites

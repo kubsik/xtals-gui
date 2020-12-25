@@ -31,9 +31,9 @@ public slots:
     void loadConfigFromFile();
     void createConfigFile();
     void verifyXTALSversion();
-    void analyzeProgressBar(QThread *instance);
     void runXTALS();
     void onNewLine(QString);
+    void onEnd(int);
 
 private:
     QToolBox *toolBox;

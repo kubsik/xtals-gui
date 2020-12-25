@@ -17,6 +17,8 @@ private:
     QString singleLine;
 signals:
     QString newLineSignal(QString singleLine);
+    int endSignal(int);
 };
+
 
 #endif // XTALTHREAD_H
