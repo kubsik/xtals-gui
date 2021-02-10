@@ -179,11 +179,16 @@ void ToolBox::runXTALS()
 
     QStringList newArgToRunXTAL;
     newArgToRunXTAL << "--readconf" << configPathLine->text();
-    if (isExport) newArgToRunXTAL << "--export";
-    if (isSignal) newArgToRunXTAL << "--signal";
-    if (isIntegrate) newArgToRunXTAL << "--integrate";
-    if (isGeometry) newArgToRunXTAL << "--geometry";
-    if (isDump) newArgToRunXTAL << "--dump";
+    if (isExport && isSignal && isIntegrate && isGeometry && isDump) {
+        newArgToRunXTAL << "--all";
+    } else {
+        if (isExport) newArgToRunXTAL << "--export";
+        if (isSignal) newArgToRunXTAL << "--signal";
+        if (isIntegrate) newArgToRunXTAL << "--integrate";
+        if (isGeometry) newArgToRunXTAL << "--geometry";
+        if (isDump) newArgToRunXTAL << "--dump";
+    }
+    qDebug() << "DEBUG: XTAL will be triggered with options " << newArgToRunXTAL;
 
     /* thread goes out of scope (i.e. is destroyed) if pointer is not used*/
     xtalThread *xtalInstance = new xtalThread;
